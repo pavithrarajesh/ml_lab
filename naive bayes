@@ -1,0 +1,49 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn import metrics
+     
+
+
+df = pd.read_csv("/kaggle/input/diabetescsv/diabetes.csv - Sheet1.csv")
+feature_col_names = ['num_preg', 'glucose_conc', 'diastolic_bp', 'thickness', 'insulin', 'bmi', 'diab_pred', 'age']
+predicted_class_names = ['diabetes']
+     
+
+X = df[feature_col_names].values 
+y = df[predicted_class_names].values
+     
+
+print(df.head)
+xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.33)
+
+print ('\n the total number of Training Data :',ytrain.shape)
+print ('\n the total number of Test Data :',ytest.shape)
+     
+
+clf = GaussianNB().fit(xtrain,ytrain.ravel())
+predicted = clf.predict(xtest)
+predictTestData= clf.predict([[6,148,72,35,0,33.6,0.627,50]])
+     
+
+print('\n Confusion matrix')
+print(metrics.confusion_matrix(ytest,predicted))
+
+print('\n Accuracy of the classifier is',metrics.accuracy_score(ytest,predicted))
+
+print('\n The value of Precision', metrics.precision_score(ytest,predicted))
+
+print('\n The value of Recall', metrics.recall_score(ytest,predicted))
+
+print("Predicted Value for individual Test Data:", predictTestData)
+     
+Confusion matrix
+ [[132  29]
+ [ 45  48]]
+
+ Accuracy of the classifier is 0.7086614173228346
+
+ The value of Precision 0.6233766233766234
+
+ The value of Recall 0.5161290322580645
+Predicted Value for individual Test Data: [1]
